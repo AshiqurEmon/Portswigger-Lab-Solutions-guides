@@ -1,0 +1,141 @@
+1 Unprotected admin functionality 
+
+
+	Go to the lab and view robots.txt by appending /robots.txt to the lab URL.
+
+Note that the disallow line identifies the path to the admin panel.
+
+In the URL bar replace /robots.txt with /administrator-panel to load the admin panel.
+
+Delete carlos
+
+
+
+2 Unprotected admin functionality with unpredictable URL
+
+	view the source code of the home page search admin and look over the code you can notice that
+	admin path /admin-8Jf9 has been mentioned in the script 
+
+
+3 User role controlled by request parameter 
+
+	Browse to admin/ and observe that you cant access the admin panel
+	in burp proxy or cookie in browser you can observe that the response sets
+	the cookie Admin=False. change it to Admin=true Load the Admin panel and delete carlos
+
+
+4 User role can be modified in user profile 
+
+	Click on my Account and submit a new email address, observe that the response contains your role
+	ID, Send the email submission request to burp add "roleid":2 into the JSON in the Request body,
+	resend it. Observe that you get the roleid 2 and accessed to the admin account now you can have 
+	admin authority
+
+
+5 URL-based access control can be circumvented 
+
+GET /?username=carlos HTTP/1.1
+Host: acba1f0b1ec921fb8045415900c70032.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://acba1f0b1ec921fb8045415900c70032.web-security-academy.net/
+Cookie: session=krGoKg8T8h08O36ZvtBsxmn2ZryPeerp
+Upgrade-Insecure-Requests: 1
+X-Original-URL: /admin/delete
+
+
+6 Method-based access control can be circumvented 
+
+og in using the admin credentials.
+
+Browse to the admin panel, promote carlos, and send the HTTP request to Burp Repeater.
+
+Open a private/incognito browser window, and log in with the non-admin credentials.
+
+Attempt to re-promote carlos with the non-admin user by copying that user's session cookie into the existing Burp Repeater request, and observe that the response says "Unauthorized".
+
+Change the method from POST to POSTX and observe that the response changes to "missing parameter".
+
+Convert the request to use the GET method by right-clicking and selecting "Change request method".
+
+Change the username parameter to your username and resend the request. 
+
+to check if normal user session id is valid in admin account does this possible it or not to change the authority privilidge of any user so and we should change the request method from get to post or post to get to bypass the security of backend
+
+
+7 User ID controlled by request parameter 
+
+	change the username in burp interception then see the observe the result you get some others user
+	information
+
+8 User ID controlled by request parameter, with unpredictable user IDs 
+
+	find the userid than exchange your userid with the victim if this vulnerable you can take over 
+	the account of victim or take over his api keys
+
+9 User ID controlled by request parameter with data leakage in redirect 
+	
+	now here is a trick when you intercept the reqest from wiener at account page you can see that
+	when you change your account name from wiener to carlos nothing would change in browser or source
+	code but when you view the respone in burp repeater there is api key of carlos so here is bug
+
+10 User ID controlled by request parameter with password disclosure 
+
+
+
+Log in using the supplied credentials and access My Account.
+Change the "id" parameter in the URL to "administrator".
+View the response in Burp and observe that it contains the administrator's password.
+Log in to the administrator account and delete carlos.
+
+
+11 Insecure direct object references 
+
+
+
+Select the "Live chat" tab.
+
+Send a message and then select "View transcript".
+
+Review the URL and observe that the transcripts are text files assigned a filename containing an incrementing number.
+
+Change the filename to 1.txt and review the text.
+
+You will notice a password within the chat transcript.
+
+Return to the main lab page and log in using the stolen credentials.
+
+
+
+12 Multi-step process with no access control on one step 
+
+
+
+Log in using the admin credentials.
+
+Browse to the admin panel, promote carlos, and send the confirmation HTTP request to Burp Repeater.
+
+Open a private/incognito browser window, and log in with the non-admin credentials.
+
+Copy the non-admin user's session cookie into the existing Repeater request, change the username to yours, and replay it.
+
+
+
+13 Referer-based access control 
+
+
+
+Log in using the admin credentials.
+
+Browse to the admin panel, promote carlos, and send the HTTP request to Burp Repeater.
+
+Open a private/incognito browser window, and log in with the non-admin credentials.
+
+Browse to /admin-roles?username=carlos&action=upgrade and observe that the request is treated as unauthorized due to the absent Referer header.
+
+Copy the non-admin user's session cookie into the existing Burp Repeater request, change the username to yours, and replay it.
+
+
