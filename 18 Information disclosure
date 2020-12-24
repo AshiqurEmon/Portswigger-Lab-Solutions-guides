@@ -33,3 +33,7 @@ GET /product?productId="example" The unexpected data type causes an exception, a
 tip: admin end point can be found in Referer header 
 
 Referer: https://ac491f081e8bd0e480122499002d00e2.web-security-academy.net/admin
+
+to fetch the all files and directories in .git we can make a command 
+
+wget -r https://ac8e1f771e96dcd080840f1c00c00026.web-security-academy.net/.git --not-check-certificate
