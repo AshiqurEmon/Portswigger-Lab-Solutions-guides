@@ -1,0 +1,79 @@
+Clickjacking Test Code:
+
+<html>
+
+<head>
+
+<title>Clickjack test page</title>
+
+</head>
+
+<body>
+
+<p>Website is vulnerable to clickjacking!</p>
+
+<iframe src="http://www.yoursite.com/sensitive-page" width="500" height="500"></iframe>
+
+</body>
+
+</html>
+
+
+
+Step 1 : Change yoursite.com to target website and save the code
+
+Step 2 : Copy Paste the following code in Notepad and save it as example.html
+
+Step 3 : Open the example.html saved file in your browser.
+
+
+
+Clickjacking Exploitation & PoC Tool:
+
+Github Download Link - https://github.com/shifa123/clickjackingpoc
+
+
+
+A tool made to make your clickjacking POC’s better and easy.
+
+
+
+Installation:
+
+1. Make sure you have php installed (default installed on Kali/Parrot OS)
+
+2. Download If not already there, can also use XAMPP.
+
+3. In the downloaded directory run command root@rohit~ php -S localhost:8000 to start the
+
+PHP Server on port 8000.
+
+4. Open up your browser and type localhost:8000
+
+5. Type in your target website name in the box and hit load.
+
+6. Drag and Drop the Login Buttons for PoC
+
+7. Click on View
+
+8. Your PoC is ready
+
+
+
+ClickJack: A Python automated tool:
+
+Github Download Link -https://github.com/shifa123/clickjack
+
+Installation
+
+#usage -
+
+python clickjack.py http://testphp.vulnweb.com
+
+#output -
+
+Readymade - Automatically creates and opens a POC in your browser.
+
+
+
+
